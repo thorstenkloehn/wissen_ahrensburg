@@ -14,7 +14,11 @@ Das Projekt folgt einer standardmäßigen Android-Einzelmodulstruktur:
 - `app/src/main/java/de/wissenahrensburg/wissen_ahrensburg/`: Enthält den Hauptquellcode.
   - `MainActivity.kt`: Der Haupteinstiegspunkt der Anwendung.
   - `Logo.kt`: Enthält benutzerdefinierte UI-Komponenten wie das `AhrensburgLogo`, das mit Compose Canvas gezeichnet wurde.
+  - `model/Wissendatenbank.kt`: Datenmodell für die Wissenseinträge (Titel, Beschreibung, Adresse).
+  - `model/WissenLoader.kt`: Hilfsklasse zum Einladen und Parsen der CSV-Daten aus den Ressourcen.
   - `ui/theme/`: Enthält Material 3 Theme-Definitionen (Farbe, Typografie, Theme).
+- `app/src/main/res/raw/`: Enthält Rohdatenressourcen.
+  - `wissen_datenbank.csv`: Die primäre Datenquelle mit Informationen über Sehenswürdigkeiten und Orte in Ahrensburg.
 
 ## Bauen und Ausführen
 
@@ -39,4 +43,6 @@ Das Projekt folgt einer standardmäßigen Android-Einzelmodulstruktur:
   - Instrumentierte Tests: `app/src/androidTest/`
 
 ## Projektstatus
-Das Projekt verfügt derzeit über eine Landing-Page mit einem benutzerdefinierten Logo, das das Ahrensburger Schloss und ein symbolisches Buch darstellt, was auf seinen Zweck als Wissensdatenbank hinweist.
+- **UI:** Die Anwendung verfügt über eine Landing-Page mit Logo und einer scrollbaren Liste (`LazyColumn`), die die Wissenseinträge in Karten (`WissenCard`) darstellt.
+- **Daten:** Das Datenmodell (`Wissendatenbank`) ist implementiert. Der `WissenLoader` lädt die Daten erfolgreich aus der `wissen_datenbank.csv`.
+- **Nächste Schritte:** Implementierung einer Detailansicht für die Einträge und Suchfunktion.
