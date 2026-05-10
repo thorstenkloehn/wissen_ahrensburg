@@ -12,13 +12,19 @@
 ## Architektur
 Das Projekt folgt einer standardmäßigen Android-Einzelmodulstruktur:
 - `app/src/main/java/de/wissenahrensburg/wissen_ahrensburg/`: Enthält den Hauptquellcode.
-  - `MainActivity.kt`: Der Haupteinstiegspunkt der Anwendung.
-  - `Logo.kt`: Enthält benutzerdefinierte UI-Komponenten wie das `AhrensburgLogo`, das mit Compose Canvas gezeichnet wurde.
-  - `model/Wissendatenbank.kt`: Datenmodell für die Wissenseinträge (Titel, Beschreibung, Adresse).
-  - `model/WissenLoader.kt`: Hilfsklasse zum Einladen und Parsen der CSV-Daten aus den Ressourcen.
-  - `ui/theme/`: Enthält Material 3 Theme-Definitionen (Farbe, Typografie, Theme).
+  - `MainActivity.kt`: Der Haupteinstiegspunkt, verwaltet den State der Wissendatenbank (`wissenobjekt`) und die Haupt-UI.
+  - `Logo.kt`: Enthält das `AhrensburgLogo`, eine mit `Canvas` gezeichnete Komponente (Schloss + Buch).
+  - `model/Wissendatenbank.kt`: Datenklasse für Einträge (Titel, Beschreibung, Adresse).
+  - `model/WissenLoader.kt`: Hilfsklasse zum Einladen und Parsen der CSV-Daten.
+  - `ui/theme/`: Material 3 Design-System (Farben, Typografie).
 - `app/src/main/res/raw/`: Enthält Rohdatenressourcen.
   - `wissen_datenbank.csv`: Die primäre Datenquelle mit Informationen über Sehenswürdigkeiten und Orte in Ahrensburg.
+
+## Features & UI-Komponenten
+- **AhrensburgLogo:** Custom Canvas-Zeichnung des Schlosses.
+- **WissenCard:** Material 3 Card zur Darstellung der Einträge mit Standort-Icon.
+- **Daten-Loading:** Automatisches Laden der CSV-Daten via `LaunchedEffect`.
+- **Lazy List:** Performante Anzeige der Einträge mittels `LazyColumn`.
 
 ## Bauen und Ausführen
 
