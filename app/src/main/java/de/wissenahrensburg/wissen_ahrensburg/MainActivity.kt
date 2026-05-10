@@ -31,20 +31,73 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import android.webkit.WebView
+import android.webkit.WebViewClient
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.viewinterop.AndroidView
 import de.wissenahrensburg.wissen_ahrensburg.model.WissenLoader
 import de.wissenahrensburg.wissen_ahrensburg.model.Wissendatenbank
 import de.wissenahrensburg.wissen_ahrensburg.ui.theme.Wissen_ahrensburgTheme
 
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             Wissen_ahrensburgTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    KnowledgeBaseHome(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                var currentScreen by remember { mutableStateOf("home") }
+
+                Scaffold(
+                    modifier = Modifier.fillMaxSize(),
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Wissen Ahrensburg") },
+                            actions = {
+                                if (currentScreen == "home") {
+                                    Text(
+                                        text = "Impressum",
+                                        modifier = Modifier
+                                            .padding(end = 12.dp)
+                                            .clickable { currentScreen = "impressum" },
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                    Text(
+                                        text = "Datenschutz",
+                                        modifier = Modifier
+                                            .padding(end = 16.dp)
+                                            .clickable { currentScreen = "datenschutz" },
+                                        style = MaterialTheme.typography.labelMedium,
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                } else {
+                                    Text(
+                                        text = "Zurück",
+                                        modifier = Modifier
+                                            .padding(end = 16.dp)
+                                            .clickable { currentScreen = "home" },
+                                        color = MaterialTheme.colorScheme.primary
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        )
+                    }
+                ) { innerPadding ->
+                    Box(modifier = Modifier.padding(innerPadding)) {
+                        when (currentScreen) {
+                            "home" -> KnowledgeBaseHome()
+                            "impressum" -> ImpressumScreen()
+                            "datenschutz" -> DatenschutzScreen()
+                        }
+                    }
                 }
             }
         }
@@ -52,7 +105,33 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun KnowledgeBaseHome(modifier: Modifier = Modifier) {
+fun ImpressumScreen() {
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                webViewClient = WebViewClient()
+                loadUrl("file:///android_asset/impressum.html")
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+@Composable
+fun DatenschutzScreen() {
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                webViewClient = WebViewClient()
+                loadUrl("file:///android_asset/datenschutz.html")
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    )
+}
+
+@Composable
+fun KnowledgeBaseHome() {
     val context = LocalContext.current
     var wissenobjekt by remember { mutableStateOf<List<Wissendatenbank>>(emptyList()) }
 
@@ -61,7 +140,7 @@ fun KnowledgeBaseHome(modifier: Modifier = Modifier) {
     }
 
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(32.dp))
